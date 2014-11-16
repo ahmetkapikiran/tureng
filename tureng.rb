@@ -12,33 +12,26 @@ class Tureng
   end
 
   def get_response
-    uri = @url + @word
+    uri = @url + URI::encode(@word)
     @response = Nokogiri::HTML(open("#{uri}"), nil, 'utf-8')
   end
 
-  def parse_tables_from_response
-    get_response
-    @en_tr_table = @response.css("table[id='englishResultsTable']")
-    @en_tr_table_full = @response.css("table[id='englishFullResultsTable']")
-  end
-
   def draw_results(params)
-    parse_tables_from_response
-
-    params == "en_to_tr" ? (source = @en_tr_table) : (source = @en_tr_table_full)
+    source = @response.css("table[id='#{params}ResultsTable']")
+    return if source.empty?
 
     # draw an empty table
     table = Text::Table.new :horizontal_padding    => 1,
-                :vertical_boundary     => '=',
-                :horizontal_boundary   => '|',
-                :boundary_intersection => 'O'
+                            :vertical_boundary     => '=',
+                            :horizontal_boundary   => '|',
+                            :boundary_intersection => 'O'
 
     # parse table headings
     headings = source.css('th')
 
     # add headings to table
     table.head = ["##","#{headings[1].text}", "#{headings[3].text}", "#{headings[4].text}"]
-    
+
     # parse and count translation results
     tr_tags = source.css("tr")
     size_of_tr_tags = tr_tags.size - 1 # -1 is for th tags
@@ -79,8 +72,10 @@ class Tureng
     elsif status == "Term not found"
       puts "Aradığınız kelime bulunamadı."
     else
-      draw_results("en_to_tr")
-      draw_results("en_to_tr_full")
+      draw_results('turkish')
+      draw_results('turkishFull')
+      draw_results('english')
+      draw_results('englishFull')
     end
   end
 end
