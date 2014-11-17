@@ -13,12 +13,15 @@ Betiği çalıştırabilmek için sisteminizde nokogiri, open-uri ve text-table 
 ```
 $ [sudo] gem install nokogiri
 $ [sudo] gem install text-table
+$ [sudo] cd /usr/bin
+$ [sudo] chmod +x /path/to/tureng.rb
+$ [sudo] ln -s /path/to/tureng.rb tureng
 ```
 
-Daha sonra betiğin bulunduğu dizine düşerek çalıştırmanız yeterlidir;
+## Kullanım
 
 ```
-$ ruby tureng.rb
+$ tureng bla bla bla
 ```
 
 ## Ekran Görüntüleri

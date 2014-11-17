@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 # coding: utf-8
 # Mustafa Serhat DÜNDAR
 # msdundars@gmail.com
@@ -82,20 +83,34 @@ end
 
 # Dead simple, quite basic interpretation
 def translate
-  quit_values = ["q", "quit", "exit"]
-  while true
-    puts "Tureng'de aramak istediğiniz kelimeyi girin: "
-    begin
-      input = gets.chomp
-      unless quit_values.include?(input)
-        c = Tureng.new("#{input}")
-        c.draw_all_results
-      else
-        break
+  if ARGV.count > 0
+    translate_to_argument
+  else
+    quit_values = ["q", "quit", "exit"]
+    while true
+      puts "Tureng'de aramak istediğiniz kelimeyi girin: "
+      begin
+        input = gets.chomp
+        unless quit_values.include?(input)
+          c = Tureng.new("#{input}")
+          c.draw_all_results
+        else
+          break
+        end
+      rescue
+        puts "Hatalı giriş, tekrar deneyin!"
       end
-    rescue
-      puts "Hatalı giriş, tekrar deneyin!"
     end
+  end
+end
+
+def translate_to_argument
+  begin
+    word = ARGV.join(' ')
+    c = Tureng.new(word)
+    c.draw_all_results
+  rescue
+    puts "Hatalı giriş, Exm: tureng bla bla bla"
   end
 end
 
